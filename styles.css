@@ -1,0 +1,15 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+header{
+    height: 15vh;
+    background: black;
+}
+#content{
+    height: 75vh;
+}
+footer{
+    height: 10vh;
+    background: black;
+}
