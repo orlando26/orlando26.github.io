@@ -1,32 +1,40 @@
 #header{
-    height: 15vh;
+    height: 10vh;
+    margin: 0!important;
+    padding: 0!important;
+    border: 0 !important;
 }
 
 #content{
     height: 80vh;
+    margin: 0!important;
+    padding: 0!important;
+    border: 0 !important;
 }
 
-.logo{
-    display: block;
-    margin-left: auto;
-    margin-right: auto; 
-    margin-top: 1vh;
-    height: 80%;
-    width: 60%;
+#footer{
+    height: 10vh;
+    margin: 0!important;
+    padding: 0!important;
+    border: 0 !important;
 }
 
-.usImg{
-    width: 80%;
-    height: 90%;
+#rubik{
+    margin-top:20px;
+    margin-left: 20px;
 }
 
-.tablist-left {
-width:  25%;
-display: inline-block;
+#face{
+    margin: auto;
+    width: 50vh;
+    height: 50vh;
+    border: 5px black;
 }
-.tablist-content {
-width: 60%;
-display: inline-block;
-vertical-align: top;
-margin-left: 5%;
+
+.square{
+    float: left;
+    height: 32%;
+    width: 32%;
+    border: solid black 1px;
+    background: blue;
 }
