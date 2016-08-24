@@ -37,9 +37,11 @@
     width: 32%;
     border: solid black 1px;
     background: blue;
+    cursor: pointer;
 }
 
 #rubik-link{
     display: none;
     margin-left: auto !important;
 }
+
