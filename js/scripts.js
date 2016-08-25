@@ -62,7 +62,7 @@ $(function() {
         } else if (face == 'back') {
             $('#rubik-link').show('clip');
             face = '';
-            YUI().use('rubik-simple', function(Y) {
+            YUI().use('node','rubik-simple', function(Y) {
                 var cube = window.cube = new Y.Rubik();
                 cube.run();
             });
