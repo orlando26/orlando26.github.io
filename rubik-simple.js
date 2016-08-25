@@ -1,64 +1,12 @@
 /*
 *
-* HTML5, CSS3 & JavaScript Rubik's cube
+* HTML5: CSS3 & JavaScript Rubik's cube
 * Rubik's Cube ® used by permission of Seven Towns Limited.
 * http://www.rubiks.com
 *
 */
 
-var FACES = {
-        front : ["blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue"],
-        back : ["green","green","green","green","green","green","green","green","green"],
-        up : ["yellow","yellow","yellow","yellow","yellow","yellow","yellow","yellow","yellow",],
-        down : ["white","white","white","white","white","white","white","white","white",],
-        left : ["red","red","red","red","red","red","red","red","red",],
-        right : ["orange","orange","orange","orange","orange","orange","orange","orange","orange",]
-    };
-
-YUI.add('rubik-queue', function (Y) {
-
-    Queue = function (config) {
-        config = config || {};
-        this.size = 0;
-        this.current = -1;
-        this._queue = [];
-    };
-
-    Queue.prototype = {
-
-        add: function (m) {
-            if(++this.current == this.size){
-                this._queue.push(m);
-                this.size++;
-            }else{
-                this._queue = this._queue.slice(0,this.current);
-                this.size = this.current + 1;
-                this._queue.push(m);
-            }
-        },
-        undo: function () {
-            var m;
-            if(this.current >= 0){
-                m = this._queue[this.current];
-                m.rotate = m.rotate === 'left'? 'right' : 'left';
-                this.current--;
-                return m;
-            }
-        },
-        redo: function () {
-            if (this.current + 1 < this.size){
-                var m = this._queue[++this.current];
-                m.rotate = m.rotate === 'left'? 'right' : 'left';
-                return m;
-            }
-        }
-
-    };
-    Y.Queue = Queue;
-});
-
-
-YUI.add('rubik', function (Y) {
+YUI.add('rubik-simple', function (Y) {
     /*
     * This is a map for the cubies movements.
     * When the cube rotates in a certain way we have move his position on the cube.
@@ -170,14 +118,13 @@ YUI.add('rubik', function (Y) {
       
     //Match the sides with css .class
     var INIT_CONFIG = {
-        "front":["ftl", "fcl", "fbl", "ftc", "fcc", "fbc", "ftr", "fcr", "fbr"],
-        "back":["btl", "bcl", "bbl", "btc", "bcc", "bbc", "btr", "bcr", "bbr"],
-        "up":["utl", "ucl", "ubl", "utc", "ucc", "ubc", "utr", "ucr", "ubr"],
-        "down":["dtl", "dcl", "dbl", "dtc", "dcc", "dbc", "dtr", "dcr", "dbr"],
-        "left":["ltl", "lcl", "lbl", "ltc", "lcc", "lbc", "ltr", "lcr", "lbr"],
-        "right":["rtl", "rcl", "rbl", "rtc", "rcc", "rbc", "rtr", "rcr", "rbr"]
+        "front":"blue",
+        "back":"green",
+        "up":"red",
+        "down":"white",
+        "left":"orange",
+        "right":"yellow"
     };
-    
     function Rubik (cfg) {
         this._init(cfg || {});
         this._bind();
@@ -188,12 +135,6 @@ YUI.add('rubik', function (Y) {
             this._container = Y.one(cfg.container || '#cube-container');
             this._cube = Y.one(cfg.src || '#cube');
             this._plane = Y.Node.create('<div id="plane"></div>');
-            this._controls = Y.one(cfg.controls || '#cube-controls');
-            this._rotation = Y.one(cfg.controls || '#rotation');
-            this._solve = Y.one(cfg.solve || '.solve');
-            this._undo = Y.one(cfg.undo || '.undo');
-            this._redo = Y.one(cfg.redo || '.redo');
-            this._queue = new Y.Queue();
             this._cube.append(this._plane);
             this._expectingTransition = false;
             this._setScroll();
@@ -215,72 +156,7 @@ YUI.add('rubik', function (Y) {
            this._container.on('gesturechange',this._multiTouchMove,this);
            this._container.on('gestureend',this._multiTouchEnd,this);
 
-           this._solve.on('gesturemovestart',this._solveFake,{preventDefault:true},this);
-           this._undo.on('gesturemovestart',this._undoMove,{preventDefault:true},this);
-           this._redo.on('gesturemovestart',this._redoMove,{preventDefault:true},this);
-
-           if (Y.UA.mobile) {
-                //this._rotation.on('gesturestart',this._onRotationFocus,this);
-                //this._rotation.on('gestureend',this._onRotationBlur,this);
-                //we support it by default:
-                this._enableRotation = true;
-            } else {
-                this._rotation.on('click',this._onRotationToggle,this);
-                Y.on('keypress',Y.bind(this._keyPress,this));
-            }
-
-
-           Y.on('orientationchange',Y.bind(this._changeOrientation,this));
            Y.one('body').on('gesturemovestart',this._checkScroll,{},this);
-        },
-        _keyPress: function (e) {
-            e.halt();
-            if (e.charCode == 114) {
-                this._onRotationToggle();
-            }
-            return;
-        },
-        _undoMove: function (e) {
-            if (this._moving)return;
-            var movement = this._queue.undo();
-            this._expectingTransition = true;
-            movement && this._doMovement(movement, true);
-            return movement;
-        },
-        _redoMove: function (e) {
-            if (this._moving)return;
-            var movement = this._queue.redo();
-            this._expectingTransition = true;
-            movement && this._doMovement(movement, true);
-        },
-        _solveFake: function (){
-            this._solving = Y.later(350,this,function (){
-                var m = this._undoMove();
-                if(!m){
-                    this._solving.cancel();
-                }
-            },null,true);
-        },
-        _changeOrientation: function (evt) {
-            this._setScroll();
-            this._portrait = window.orientation === 0 ? this._changeToPortrait() : this._changeToLandscape();
-        },
-        _onRotationFocus: function ()  {
-            this._enableRotation = true;
-        },
-        _onRotationBlur: function ()  {
-          this._enableRotation = false;
-        },
-        //handler only for non-touch/gesture devices
-        _onRotationToggle: function ()  {
-            var enabled = this._enableRotation;
-            if (enabled) {
-               this._rotation.removeClass('pcRotation');
-            } else {
-                 this._rotation.addClass('pcRotation');
-            }
-            this._enableRotation = !enabled;
-            this._gesture = !enabled;
         },
         _setScroll: function (evt) {
             self = this;
@@ -288,37 +164,25 @@ YUI.add('rubik', function (Y) {
                 window.scrollTo(0,1);
             },1);
         },
-        _checkScroll: function (evt) {
-            this._setScroll();
-        },
         _setInitialPosition: function (cfg) {
             this._setInitialColors();
             //TODO: set as a configurable ATTR on instanciation
-            var pos = cfg && cfg.position || {x: 30, y: -30 };
+            var pos = cfg && cfg.position || {x: 28, y: -28 };
             this._cube.setStyle('transform','rotateX('+ pos.y + 'deg) rotateY(' +pos.x + 'deg)');
-
             this._cubeXY = pos;
             this._tempXY = pos;
         },
         _setInitialColors: function (){
             for(var face in INIT_CONFIG){
-                Y.one('.'+ INIT_CONFIG[face][0] +'.' + face + ' > div').addClass(FACES[face][0]);
-                Y.one('.'+ INIT_CONFIG[face][1] +'.' + face + ' > div').addClass(FACES[face][1]);
-                Y.one('.'+ INIT_CONFIG[face][2] +'.' + face + ' > div').addClass(FACES[face][2]);
-                Y.one('.'+ INIT_CONFIG[face][3] +'.' + face + ' > div').addClass(FACES[face][3]);
-                Y.one('.'+ INIT_CONFIG[face][4] +'.' + face + ' > div').addClass(FACES[face][4]);
-                Y.one('.'+ INIT_CONFIG[face][5] +'.' + face + ' > div').addClass(FACES[face][5]);
-                Y.one('.'+ INIT_CONFIG[face][6] +'.' + face + ' > div').addClass(FACES[face][6]);
-                Y.one('.'+ INIT_CONFIG[face][7] +'.' + face + ' > div').addClass(FACES[face][7]);
-                Y.one('.'+ INIT_CONFIG[face][8] +'.' + face + ' > div').addClass(FACES[face][8]);
+                Y.all('.' +face + ' > div').addClass(INIT_CONFIG[face]);
             }
         },
         _endTransition: function (evt) {
             if (this._expectingTransition){
+                console.log('W');
                 evt.halt();
                 this._plane.set('className',"");
                 this._reorganizeCubies();
-                this._reorientCubies();
                 this._detachToPlane();
                 this._moving = false;
                 this._expectingTransition = false;
@@ -335,7 +199,6 @@ YUI.add('rubik', function (Y) {
             this._startY = evt.clientY;
             this._deltaX = 0;
             this._deltaY = 0;
-            
         },
         /*
         * Getting a mouse/double-finger moving. We need to update the rotation(XY) of the cube
@@ -353,29 +216,29 @@ YUI.add('rubik', function (Y) {
                 this._tempXY = {x: x, y:y};
                 this._moved = true;
                 this._cube.setStyle('transform','rotateX('+ y  + 'deg) rotateY(' + x + 'deg)');
+                Y.one('#log > p').setContent("Moved:" + Math.floor(y) +' , ' + Math.floor(x) );
             }else{
                 this._moved = false;
             }
         },
         /*
-        * All magic happen here. We have to check how the use flick his finger, in which side,
+        * All magic happen here. Check how the user flick his finger, in which side...
+        * Map this regarding the 2D position of the cube and transform it in 3D.
         */
         _onEndCube:function (evt) {
             //if gesture we dont do movement
-            if (this._gesture || this._moved || !this._tempCubie) {
+            if (this._disabledFLick || this._gesture || this._moved || !this._tempCubie) {
                 this._gesture = false;
                 this._moved = false;
-                if (!Y.UA.mobile){
-                    this._onRotationToggle();
-                    this._multiTouchEnd(evt);
-                }
                 return;
             }
             evt.halt();
-            if (!this._deltaX && !this._deltaY)return; // if we dont move we dont do nothing
+
+            if (!this._deltaX && !this._deltaY)return; // if no delta no move, so nothing to do!
+
             this._tempXY = {x: this._tempXY.x % 360, y: this._tempXY.y % 360 };// to get controlled the degrees
             var threshold = 70,//ToDo: Double check this value in different devices
-                movement,swap,cubeMove
+                movement,swap,
                 rotateX = this._deltaX > 0 ? "right" :"left",
                 rotateXInverted = rotateX == "right" ? "left": "right",
                 deg = Math.abs(this._tempXY.x),
@@ -385,14 +248,17 @@ YUI.add('rubik', function (Y) {
                 mHorizontal = Math.abs(this._deltaX) > Math.abs(this._deltaY),
                 parts = this._tempCubie.get('className').split(' ');
                 this._expectingTransition = true;
-             // We will have to translate the finger movements to the cube movements
-             //(implies transform 2D dimension into -> 3D)
+
+             /* We will have to translate the finger movements to the cube movements
+             * (implies transform 2D dimension into -> 3D)
+             * At some point we should refactor this in a better way...
+             */
+
             switch(true){
                 //E Movements:
                 //Front, left, right, back in E (left or right) direction
                 case parts[2] != "up" && parts[2] != "down" && mHorizontal:
                     movement = {face: parts[4].charAt(0),slice: parts[4].charAt(1),rotate: rotateX};
-                    
                     break;
                 //up and down in E ( we have to adjust the 3D rotation tu a 2D plane:
                 case (parts[2] == "up" || parts[2] == "down") && mHorizontal && deg>= -45 &&  deg<45:
@@ -446,19 +312,8 @@ YUI.add('rubik', function (Y) {
                    
                 default: break;
              }
-             if(movement.face == "U") cubeMove = movement.rotate == "left" ? "U" : "U'";
-             if(movement.face == "D") cubeMove = movement.rotate == "left" ? "D'" : "D";
-             if(movement.face == "R") cubeMove = movement.rotate == "left" ? "R" : "R'";
-             if(movement.face == "L") cubeMove = movement.rotate == "left" ? "L'" : "L";
-             if(movement.face == "B") cubeMove = movement.rotate == "left" ? "B" : "B'";
-             
-             console.log(cubeMove);
-             //this._gesture = false;//finish all touching
-            if (movement){
+            if (movement)
                 this._doMovement(movement);
-                
-            }
-                
         },
         _multiTouchStart:function (evt) {
             evt.halt();
@@ -482,29 +337,12 @@ YUI.add('rubik', function (Y) {
         
         _doMovement:function (m,fromQueue) {
             if (this._moving)return;//we cancel if there is some movement going on
-            //save the movement if doesnt came from the queue.
-            if(!fromQueue){
-                this._queue.add(m);
-            }
             var plane = this._plane,
-                list = Y.all('.' + m.face + m.slice),
-                origin;
-
+                list = Y.all('.' + m.face + m.slice);
             this._movement = m;
             this._moving = true;
             this._attachToPlane(list);
-
-            switch (m.slice) {
-                case 'M' : origin = '0 200px'; break;
-                case 'S'  : origin = '200px 200px'; break;
-                default : origin = '';
-            }
-
-            plane.setStyle('-webkit-transform-origin', origin); 
-            plane.get('offsetHeight');
-            plane.addClass('moving');
-            plane.addClass(m.slice +'-'+ m.rotate);
-            
+            plane.addClass('moving').addClass(m.slice +'-'+ m.rotate);
         },
         _attachToPlane:function (list) {
             this._plane.setContent(list);
@@ -537,214 +375,17 @@ YUI.add('rubik', function (Y) {
                     originCube.set('className', cubePosDes + destCubeClass.substr(3));
                 });
         },
-        _changeTextOrientation:function (elm,rotation) {
-            var state = elm.get('className'),txt = state.split(' ',2),color = txt[0] + " ";
-            txt= txt[1] || txt[0];
-            switch(txt){
-                case "textLeft": elm.replaceClass(txt, rotation == "left" ? 'textDown' : '');break;
-                case "textRight":elm.replaceClass(txt, rotation == "left" ? '' : 'textDown');break;
-                case "textDown": elm.replaceClass(txt, rotation == "left" ? 'textRight' : 'textLeft');break;
-                default: elm.set('className',color + (rotation == "left" ? 'textLeft' : 'textRight') );break;
-            }
-        },
-        //Reorient the content inside the cubics
-        _reorientCubies:function () {
-            var plane = this._plane,
-                cubies = plane.get('children'),
-                m = this._movement;
-
-            switch(true){
-                case m.face == "C" && m.slice == "S":
-                case m.face == "F" && m.slice == "S":
-                    cubies.each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    break;
-                                        
-                case m.face == "B" && m.slice == "S":
-                    cubies.filter('.back').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate == "left"? "right":"left" );
-                    },this);
-                    cubies.filter(':not(.back)').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    break;
-                                                     
-                case m.face == "L" && m.slice == "M":
-                    cubies.filter('.left').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    break;
-                                                     
-                case m.face == "R" && m.slice == "M":
-                    cubies.filter('.right').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate =="left"? "right":"left");
-                    },this);
-                    break;
-                                                     
-                case m.face =="C" && m.slice == "E" && m.rotate =="left":
-                case m.face =="U" && m.slice == "E" && m.rotate =="left":
-                    cubies.filter('.up').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate =="left"? "right":"left");
-                    },this);
-                    cubies.filter('.back').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    cubies.filter('.right').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                        },this);
-                    break;
-                                                     
-                case m.face =="C" && m.slice == "E" && m.rotate =="right":
-                case m.face =="U" && m.slice == "E" && m.rotate =="right":
-                    cubies.filter(function (i) {
-                        return i.className.indexOf('up') !== -1;
-                    }).each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate =="left"? "right":"left");
-                    },this);
-                    cubies.filter(function (i) {
-                        return i.className.indexOf('back') !== -1;
-                    }).each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    cubies.filter(function (i) {
-                        return i.className.indexOf('left') !== -1;
-                    }).each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    break;
-                
-                case m.face =="D" && m.slice == "E" && m.rotate =="right":
-                    cubies.filter('.down').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    cubies.filter('.back').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    cubies.filter('.left').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    break;
-                                                     
-                case m.face =="D" && m.slice == "E" && m.rotate == "left":
-                    cubies.filter('.down').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    cubies.filter('.back').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    cubies.filter('.right').each(function (e) {
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                        this._changeTextOrientation(e.one('*'),m.rotate);
-                    },this);
-                    break;
-                default: break;
-            }
-        },
-        _startRotationMode: function () {
-            if (window.DeviceOrientationEvent) {
-                this._tempXY = {x:-20,y:50};
-                this._rotationAttach = Y.bind(this._getRotation,this);
-                window.addEventListener('deviceorientation',this._rotationAttach, false);
-            }
-        },
-        _endRotationMode:function () {
-            window.removeEventListener('deviceorientation',this._rotationAttach);
-        },
-        _getRotation: function (evt) {
-            var tiltLR = this._tempXY.x + Math.round(evt.gamma* 1.4) ,
-                tiltFR = this._tempXY.y - Math.round(evt.beta * 1.4) ,
-                rotation = "rotateY(" + tiltLR + "deg) rotateX("+tiltFR +"deg)";
-            //Y.one('#log > p').setContent(rotation);
-            this._cube.setStyle('transform',rotation);
-            //this._tempXY = {x: tiltFR,y: tiltLR};
-        },
-        _initPortrait:function () {
-            var transformIn = {opacity: 1,duration: 2},
-                css = {display: 'block'},
-                cubeStyle = {
-                    zoom: '1.20',
-                    margin: '80px 180px',
-                    display:'block'
-                },
-                self = this;
-            //this._startRotationMode();
-            this._cube.setStyles(cubeStyle).transition(transformIn);
-            this._tutorial.setStyles(css).transition(transformIn);
-
-        },
-        _changeToPortrait: function () {
-            var css = {display: 'none'},
-            cubeStyle = {
-                    zoom: '0.5',
-                    margin: '80px 180px',
-                    display:'block'
-                };
-
-            //start gyroscope rotation
-            //this._startRotationMode();
-
-            //show:
-            Y.later(300,this,function () {
-                this._tutorial.setStyles({display: 'block',opacity:1,bottom:'10px'});
-            });
-
-            //hide:
-            this._messages.setStyles(css);
-            this._controls.setStyles(css);
-            this._cube.transition(cubeStyle);
-            return true;
-        },
         _initLandscape:function () {
             var transformIn = {opacity: 1,duration:2},
                 css = {display: 'block'};
 
             this._cube.transition(transformIn);
-            this._messages.setStyles(css).transition(transformIn);
-            this._controls.setStyles(css).transition(transformIn);
-        },
-        _changeToLandscape:function () {
-            //stop gyroscope rotation
-            this._endRotationMode();
-
-            var tr = {opacity:0},
-                cssDisplayNone = {display: 'none'},
-                cssDisplay = {display: 'block',opacity:1},
-                cubeStyle = {
-                    zoom: '0.5',
-                    margin: '40px 110px'
-                };
-
-            //show
-            this._cube.setStyles(cubeStyle);
-            this._messages.setStyles(cssDisplay);
-            this._controls.setStyles(cssDisplay);
-
-            //hide
-            this._tutorial.transition(tr,function () {
-                this.setStyles(cssDisplayNone);
-            });
-
-            return false;//for the orientation(for sake of simplicity)
         },
         run:function () {
-            var force;
-            //force = true;
-            if (force || (this._portrait = window.orientation === 0)){
-                this._initPortrait();
-            }else{
                 this._initLandscape();
-            }
         }
     };
 Y.Rubik = Rubik;
 },"0.0.1",{
-    requires:['rubik-queue','yui-later','node','transition','event','event-delegate','event-gestures']
+    requires:['yui-later','node','transition','event','event-delegate','event-gestures']
 });
