@@ -1,0 +1,46 @@
+.header{
+    height: 10vh;
+    margin: 0!important;
+    padding: 0!important;
+    border: 0 !important;
+}
+
+.content{
+    height: 80vh;
+    margin: 0!important;
+    padding: 0!important;
+    border: 0 !important;
+}
+
+.footer{
+    height: 10vh;
+    margin: 0!important;
+    padding: 0!important;
+    border: 0 !important;
+}
+
+#rubik{
+    margin-top:20px;
+    margin-left: 20px;
+}
+
+#face{
+    margin: auto;
+    width: 50vh;
+    height: 50vh;
+    border: 5px black;
+}
+
+.square{
+    float: left;
+    height: 32%;
+    width: 32%;
+    border: solid black 1px;
+    background: blue;
+    cursor: pointer;
+}
+
+#rubik-link{
+    display: none;
+    margin-left: auto !important;
+}
