@@ -7,10 +7,7 @@ var orange = "rgb(255, 165, 0)";
 
 var face = 'front';
 $(function() {
-    YUI().use('node','rubik-simple', function(Y) {
-                var cube = window.cube = new Y.Rubik();
-                cube.run();
-            });
+    
     $('.square').click(function() {
         if ($(this).attr('id') != 's4') {
             var currentColor = $(this).css('background-color');

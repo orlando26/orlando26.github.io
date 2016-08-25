@@ -18,6 +18,13 @@
 </head>
 
 <body>
+    
+    <script>
+        YUI().use('node','rubik-simple', function(Y) {
+                var cube = window.cube = new Y.Rubik();
+                cube.run();
+            });
+    </script>
     <section id="rubik">
                 <div id="cube-container">
                     <div id="cube-viewport">
