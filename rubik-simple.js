@@ -1,3 +1,12 @@
+var FACES = {
+        front : ["blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue"],
+        back : ["green","green","green","green","green","green","green","green","green"],
+        up : ["yellow","yellow","yellow","yellow","yellow","yellow","yellow","yellow","yellow",],
+        down : ["white","white","white","white","white","white","white","white","white",],
+        left : ["red","red","red","red","red","red","red","red","red",],
+        right : ["orange","orange","orange","orange","orange","orange","orange","orange","orange",]
+    };
+
 YUI.add('rubik-simple', function (Y) {
     /*
     * This is a map for the cubies movements.
@@ -109,14 +118,15 @@ YUI.add('rubik-simple', function (Y) {
     };
       
     //Match the sides with css .class
-    var INIT_CONFIG = {
-        "front":"blue",
-        "back":"green",
-        "up":"red",
-        "down":"white",
-        "left":"orange",
-        "right":"yellow"
+   var INIT_CONFIG = {
+        "front":["ftl", "fcl", "fbl", "ftc", "fcc", "fbc", "ftr", "fcr", "fbr"],
+        "back":["btl", "bcl", "bbl", "btc", "bcc", "bbc", "btr", "bcr", "bbr"],
+        "up":["utl", "ucl", "ubl", "utc", "ucc", "ubc", "utr", "ucr", "ubr"],
+        "down":["dtl", "dcl", "dbl", "dtc", "dcc", "dbc", "dtr", "dcr", "dbr"],
+        "left":["ltl", "lcl", "lbl", "ltc", "lcc", "lbc", "ltr", "lcr", "lbr"],
+        "right":["rtl", "rcl", "rbl", "rtc", "rcc", "rbc", "rtr", "rcr", "rbr"]
     };
+    
     function Rubik (cfg) {
         this._init(cfg || {});
         this._bind();
@@ -165,13 +175,20 @@ YUI.add('rubik-simple', function (Y) {
             this._tempXY = pos;
         },
         _setInitialColors: function (){
-            for(var face in INIT_CONFIG){
-                Y.all('.' +face + ' > div').addClass(INIT_CONFIG[face]);
+           for(var face in INIT_CONFIG){
+                Y.one('.'+ INIT_CONFIG[face][0] +'.' + face + ' > div').addClass(FACES[face][0]);
+                Y.one('.'+ INIT_CONFIG[face][1] +'.' + face + ' > div').addClass(FACES[face][1]);
+                Y.one('.'+ INIT_CONFIG[face][2] +'.' + face + ' > div').addClass(FACES[face][2]);
+                Y.one('.'+ INIT_CONFIG[face][3] +'.' + face + ' > div').addClass(FACES[face][3]);
+                Y.one('.'+ INIT_CONFIG[face][4] +'.' + face + ' > div').addClass(FACES[face][4]);
+                Y.one('.'+ INIT_CONFIG[face][5] +'.' + face + ' > div').addClass(FACES[face][5]);
+                Y.one('.'+ INIT_CONFIG[face][6] +'.' + face + ' > div').addClass(FACES[face][6]);
+                Y.one('.'+ INIT_CONFIG[face][7] +'.' + face + ' > div').addClass(FACES[face][7]);
+                Y.one('.'+ INIT_CONFIG[face][8] +'.' + face + ' > div').addClass(FACES[face][8]);
             }
         },
         _endTransition: function (evt) {
             if (this._expectingTransition){
-                console.log('W');
                 evt.halt();
                 this._plane.set('className',"");
                 this._reorganizeCubies();
@@ -230,7 +247,7 @@ YUI.add('rubik-simple', function (Y) {
 
             this._tempXY = {x: this._tempXY.x % 360, y: this._tempXY.y % 360 };// to get controlled the degrees
             var threshold = 70,//ToDo: Double check this value in different devices
-                movement,swap,
+                movement,swap,cubeMove
                 rotateX = this._deltaX > 0 ? "right" :"left",
                 rotateXInverted = rotateX == "right" ? "left": "right",
                 deg = Math.abs(this._tempXY.x),
@@ -304,6 +321,14 @@ YUI.add('rubik-simple', function (Y) {
                    
                 default: break;
              }
+             
+             if(movement.face == "U") cubeMove = movement.rotate == "left" ? "U" : "U'";
+             if(movement.face == "D") cubeMove = movement.rotate == "left" ? "D'" : "D";
+             if(movement.face == "R") cubeMove = movement.rotate == "left" ? "R" : "R'";
+             if(movement.face == "L") cubeMove = movement.rotate == "left" ? "L'" : "L";
+             if(movement.face == "B") cubeMove = movement.rotate == "left" ? "B" : "B'";
+             
+             console.log(cubeMove);
             if (movement)
                 this._doMovement(movement);
         },

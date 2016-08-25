@@ -42,5 +42,6 @@
 
 #rubik-link{
     display: none;
-    margin-left: auto !important;
+    margin-left: auto;
+    margin-right: auto;
 }
