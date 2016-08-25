@@ -2,23 +2,7 @@
 <html>
 <head>
 <title>HTML5 Rubik's tutorial Step(III)</title>
-<style>
-    /* BODY PAGE STYLE */
-    body {
-        padding: 4em;
-    }
-    #control{
-        position: absolute;
-        top:550px;
-        height:150px; 
-    }
-    select{
-        z-index:-1;
-    }
-    select option{
-        z-index:-1;
-    }
-</style>
+
 
 <link rel="stylesheet" href="rubik.css"></link>  
 
@@ -134,34 +118,6 @@ YUI().use('node','rubik-simple',function(Y){
   
 </section>
 
-<!-- CONTROLS -->
-<section id="control">
-    <p> Select move (assume clockwise): </p>
-    <p>
-            <input type="button" value="LM">
-            <input type="button" value="RM">
-            <input type="button" value="FS">
-            <input type="button" value="BS">
-            <input type="button" value="UE">
-            <input type="button" value="DE">
-    </p>
-    <p>Allow flicks (let you play with the mouse) <input id="plane" type="checkbox" onclick="toggleFlick()"></p>
-</p>
-<script>
-    document.querySelector('#control').addEventListener("click", inputClick, false);
-    function inputClick(e){
-        var move = e.target.value;
-        if(move && move!== 'on'){
-            move = move.split('');
-            cube._expectingTransition = true;
-            cube._doMovement({face: move[0], slice: move[1],rotate: 'right'});
-        }
-    }
-    function toggleFlick(){
-        cube._disabledFLick = cube._disabledFLick ? false : true;
-    }
-</script>
-</section>
 
 </body>
 </html>

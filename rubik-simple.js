@@ -227,7 +227,7 @@ YUI.add('rubik-simple', function (Y) {
         */
         _onEndCube:function (evt) {
             //if gesture we dont do movement
-            if (this._disabledFLick || this._gesture || this._moved || !this._tempCubie) {
+            if ( this._gesture || this._moved || !this._tempCubie) {
                 this._gesture = false;
                 this._moved = false;
                 return;
