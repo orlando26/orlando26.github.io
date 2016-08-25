@@ -7,7 +7,6 @@ var orange = "rgb(255, 165, 0)";
 
 var face = 'front';
 $(function() {
-
     $('.square').click(function() {
         if ($(this).attr('id') != 's4') {
             var currentColor = $(this).css('background-color');
@@ -62,10 +61,12 @@ $(function() {
             $('.square').css('background-color', green);
         } else if (face == 'back') {
             $('#rubik-link').show('clip');
+            face = '';
             YUI().use('rubik', function(Y) {
                 var cube = window.cube = new Y.Rubik();
                 cube.run();
             });
+            
         }
     });
 });

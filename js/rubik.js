@@ -1,6 +1,6 @@
 /*
 *
-* HTML5: CSS3 & JavaScript Rubik's cube
+* HTML5, CSS3 & JavaScript Rubik's cube
 * Rubik's Cube ® used by permission of Seven Towns Limited.
 * http://www.rubiks.com
 *
@@ -375,7 +375,7 @@ YUI.add('rubik', function (Y) {
             if (!this._deltaX && !this._deltaY)return; // if we dont move we dont do nothing
             this._tempXY = {x: this._tempXY.x % 360, y: this._tempXY.y % 360 };// to get controlled the degrees
             var threshold = 70,//ToDo: Double check this value in different devices
-                movement,swap,
+                movement,swap,cubeMove
                 rotateX = this._deltaX > 0 ? "right" :"left",
                 rotateXInverted = rotateX == "right" ? "left": "right",
                 deg = Math.abs(this._tempXY.x),
@@ -392,6 +392,7 @@ YUI.add('rubik', function (Y) {
                 //Front, left, right, back in E (left or right) direction
                 case parts[2] != "up" && parts[2] != "down" && mHorizontal:
                     movement = {face: parts[4].charAt(0),slice: parts[4].charAt(1),rotate: rotateX};
+                    
                     break;
                 //up and down in E ( we have to adjust the 3D rotation tu a 2D plane:
                 case (parts[2] == "up" || parts[2] == "down") && mHorizontal && deg>= -45 &&  deg<45:
@@ -445,9 +446,19 @@ YUI.add('rubik', function (Y) {
                    
                 default: break;
              }
+             if(movement.face == "U") cubeMove = movement.rotate == "left" ? "U" : "U'";
+             if(movement.face == "D") cubeMove = movement.rotate == "left" ? "D'" : "D";
+             if(movement.face == "R") cubeMove = movement.rotate == "left" ? "R" : "R'";
+             if(movement.face == "L") cubeMove = movement.rotate == "left" ? "L'" : "L";
+             if(movement.face == "B") cubeMove = movement.rotate == "left" ? "B" : "B'";
+             
+             console.log(cubeMove);
              //this._gesture = false;//finish all touching
-            if (movement)
+            if (movement){
                 this._doMovement(movement);
+                
+            }
+                
         },
         _multiTouchStart:function (evt) {
             evt.halt();
@@ -664,7 +675,7 @@ YUI.add('rubik', function (Y) {
                     display:'block'
                 },
                 self = this;
-            this._startRotationMode();
+            //this._startRotationMode();
             this._cube.setStyles(cubeStyle).transition(transformIn);
             this._tutorial.setStyles(css).transition(transformIn);
 
@@ -672,13 +683,13 @@ YUI.add('rubik', function (Y) {
         _changeToPortrait: function () {
             var css = {display: 'none'},
             cubeStyle = {
-                    zoom: '1.20',
+                    zoom: '0.5',
                     margin: '80px 180px',
                     display:'block'
                 };
 
             //start gyroscope rotation
-            this._startRotationMode();
+            //this._startRotationMode();
 
             //show:
             Y.later(300,this,function () {
@@ -707,7 +718,7 @@ YUI.add('rubik', function (Y) {
                 cssDisplayNone = {display: 'none'},
                 cssDisplay = {display: 'block',opacity:1},
                 cubeStyle = {
-                    zoom: '0.85',
+                    zoom: '0.5',
                     margin: '40px 110px'
                 };
 
