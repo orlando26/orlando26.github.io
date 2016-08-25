@@ -1,11 +1,3 @@
-/*
-*
-* HTML5: CSS3 & JavaScript Rubik's cube
-* Rubik's Cube ® used by permission of Seven Towns Limited.
-* http://www.rubiks.com
-*
-*/
-
 YUI.add('rubik-simple', function (Y) {
     /*
     * This is a map for the cubies movements.
