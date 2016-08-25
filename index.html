@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css"></link>
     <link rel="stylesheet" href="css/rubik.css"></link>
     <script src="js/yui.min.js"></script>
-    <script src="js/rubik.js"></script>
+    <script src="js/rubik-simple.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/scripts.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
@@ -20,34 +20,38 @@
 <body>
     <div data-role="page" id="page1">
 
-	<div data-role="header" class="header">
-		<h1>Cubbot</h1>
-	</div><!-- /header -->
-
-	<div role="main" class="ui-content content">
-        <h3 style="text-align:center;margin-top:5px" id="face-name">Front Face</h3>
-		<div id="face">
-            <div id="s0" class="square"></div>
-            <div id="s3" class="square"></div>
-            <div id="s6" class="square"></div>
-            
-            <div id="s1" class="square"></div>
-            <div id="s4" class="square"></div>
-            <div id="s7" class="square"></div>
-            
-            <div id="s2" class="square"></div>
-            <div id="s5" class="square"></div>
-            <div id="s8" class="square"></div>
-            
+        <div data-role="header" class="header">
+            <h1>Cubbot</h1>
         </div>
-        <button id="statebtn">next face</button>
-		<a id="rubik-link" href="#page2" onclick="$('#rubik').show();"><h1 style="text-align:center">see rubik</h1></a>
-	</div><!-- /content -->
+        <!-- /header -->
 
-	<div data-role="footer" class="footer">
-		<h4>By Lucero, Meli y Orlando</h4>
-	</div><!-- /footer -->
-</div><!-- /page -->
+        <div role="main" class="ui-content content">
+            <h3 style="text-align:center;margin-top:5px" id="face-name">Front Face</h3>
+            <div id="face">
+                <div id="s0" class="square"></div>
+                <div id="s3" class="square"></div>
+                <div id="s6" class="square"></div>
+
+                <div id="s1" class="square"></div>
+                <div id="s4" class="square"></div>
+                <div id="s7" class="square"></div>
+
+                <div id="s2" class="square"></div>
+                <div id="s5" class="square"></div>
+                <div id="s8" class="square"></div>
+
+            </div>
+            <button id="statebtn">next face</button>
+            <a id="rubik-link" href="#page2" onclick="$('#rubik').show();"><h1 style="text-align:center">see rubik</h1></a>
+        </div>
+        <!-- /content -->
+
+        <div data-role="footer" class="footer">
+            <h4>By Lucero, Meli y Orlando</h4>
+        </div>
+        <!-- /footer -->
+    </div>
+    <!-- /page -->
     <div data-role="page" id="page2">
 
         <div class="header" data-role="header">
@@ -56,7 +60,7 @@
         <!-- /header -->
 
         <div role="main" class="ui-content content">
-            <section id="rubik" style="display:none">
+            <section id="rubik">
                 <div id="cube-container">
                     <div id="cube-viewport">
                         <div id="cube">
@@ -262,26 +266,6 @@
                     </div>
                 </div>
 
-                <aside style="float:right;">
-                    <section id="main">
-                        <div id="cube-controls">
-                            <ul>
-                                <li>
-                                    <div class="undo"><a>undo</a></div>
-                                </li>
-                                <li>
-                                    <div class="redo"><a>redo</a></div>
-                                </li>
-                                <li>
-                                    <div class="solve"><a>solve</a></div>
-                                </li>
-                                <li id="rotation">
-                                    <div class="rotate"><a>rotate</a></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </section>
-                </aside>
             </section>
         </div>
         <!-- /content -->
@@ -292,7 +276,7 @@
     </div>
     <!-- /page -->
 
-    
+
 </body>
 
 </html>

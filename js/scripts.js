@@ -29,7 +29,7 @@ $(function() {
 
     $('#statebtn').click(function() {
 
-        FACES[face][0] = getColor($('#s0').css('background-color').toString());
+        /*FACES[face][0] = getColor($('#s0').css('background-color').toString());
         FACES[face][1] = getColor($('#s1').css('background-color').toString());
         FACES[face][2] = getColor($('#s2').css('background-color').toString());
         FACES[face][3] = getColor($('#s3').css('background-color').toString());
@@ -37,7 +37,7 @@ $(function() {
         FACES[face][5] = getColor($('#s5').css('background-color').toString());
         FACES[face][6] = getColor($('#s6').css('background-color').toString());
         FACES[face][7] = getColor($('#s7').css('background-color').toString());
-        FACES[face][8] = getColor($('#s8').css('background-color').toString());
+        FACES[face][8] = getColor($('#s8').css('background-color').toString());*/
         if (face == 'front') {
             face = 'right';
             $('#face-name').text("Right Face")
@@ -62,7 +62,7 @@ $(function() {
         } else if (face == 'back') {
             $('#rubik-link').show('clip');
             face = '';
-            YUI().use('rubik', function(Y) {
+            YUI().use('rubik-simple', function(Y) {
                 var cube = window.cube = new Y.Rubik();
                 cube.run();
             });
