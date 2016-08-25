@@ -13,19 +13,44 @@
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
     <script src="rubik-simple.js"></script>
-    <script>
-        YUI().use('node','rubik-simple',function(Y){
-    var cube = window.cube = new Y.Rubik();
-    cube._disabledFLick = true;
-    cube.run();    
-});
-
-    </script>
+    <script src="scripts.js"></script>
+    
 
 </head>
 
 <body>
-    <div data-role="page" id="rubik">
+    <div data-role="page" id="main">
+
+	<div data-role="header" class="header">
+		<h1>Cubbot</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content content">
+        <h3 style="text-align:center;margin-top:5px" id="face-name">Front Face</h3>
+		<div id="face">
+            <div id="s0" class="square"></div>
+            <div id="s3" class="square"></div>
+            <div id="s6" class="square"></div>
+            
+            <div id="s1" class="square"></div>
+            <div id="s4" class="square"></div>
+            <div id="s7" class="square"></div>
+            
+            <div id="s2" class="square"></div>
+            <div id="s5" class="square"></div>
+            <div id="s8" class="square"></div>
+            
+        </div>
+        <button id="statebtn">next face</button>
+		<a id="rubik-link" href="#rubik-page" onclick="$('#rubik').show();"><h1 style="text-align:center">see rubik</h1></a>
+	</div><!-- /content -->
+
+	<div data-role="footer" class="footer">
+		<h4>By Lucero, Meli y Orlando</h4>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+    <div id="rubik-page" data-role="page">
         <div class="header" data-role="header"><h1>Cubbot</h1></div>
         <div role="main" class="ui-content content">
             <section id="rubik">
