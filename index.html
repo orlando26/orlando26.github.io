@@ -5,7 +5,9 @@
 
 
 <link rel="stylesheet" href="rubik.css"></link>  
-
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
 <script src="rubik-simple.js"></script>
 <script>
@@ -18,7 +20,10 @@ YUI().use('node','rubik-simple',function(Y){
 
 </head>
 <body>
-<section id="rubik">
+    <div data-role="page">
+	<div data-role="header">...</div>
+	<div role="main" class="ui-content">
+        <section id="rubik">
 <div id="cube-container">
     <div id="cube-viewport">
         <div id="cube">
@@ -117,6 +122,10 @@ YUI().use('node','rubik-simple',function(Y){
 </div>  
   
 </section>
+    </div>
+	<div data-role="footer">...</div>
+</div>
+
 
 
 </body>
