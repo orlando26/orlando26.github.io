@@ -176,12 +176,6 @@ function plotPhaseDiagram() {
             title: 'X(k-1)'
         }
     }
-    var vals = xData.slice(0, 4);
-    $('#val1-lbl').text('Val1: ' + vals[0].toFixed(3));  
-    $('#val2-lbl').text('Val1: ' + vals[1].toFixed(3));
-    $('#val3-lbl').text('Val1: ' + vals[2].toFixed(3));
-    $('#val4-lbl').text('Val1: ' + vals[3].toFixed(3));
-    Plotly.newPlot('plot', plotData, layout);
 }
 
 function getData() {
@@ -193,6 +187,13 @@ function getData() {
         sa = result['sa'];
         data.push(mo[currenNeuron[0]][currenNeuron[1]]);
     }
+
+    var vals = data.slice(50, 54);
+    $('#val1-lbl').text('Val1: ' + vals[0].toFixed(3));  
+    $('#val2-lbl').text('val2: ' + vals[1].toFixed(3));
+    $('#val3-lbl').text('Val3: ' + vals[2].toFixed(3));
+    $('#val4-lbl').text('Val4: ' + vals[3].toFixed(3));
+    Plotly.newPlot('plot', plotData, layout);
     return data;
 }
 
