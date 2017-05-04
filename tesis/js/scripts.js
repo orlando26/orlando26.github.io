@@ -177,7 +177,7 @@ function plotPhaseDiagram() {
         }
     }
     var vals = xData.slice(0, 4);
-    $('#val1-lbl').text('Val1: ' + vals[0].toFixed(3));
+    $('#val1-lbl').text('Val1: ' + vals[0].toFixed(3));  
     $('#val2-lbl').text('Val1: ' + vals[1].toFixed(3));
     $('#val3-lbl').text('Val1: ' + vals[2].toFixed(3));
     $('#val4-lbl').text('Val1: ' + vals[3].toFixed(3));
