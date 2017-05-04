@@ -176,6 +176,7 @@ function plotPhaseDiagram() {
             title: 'X(k-1)'
         }
     }
+    Plotly.newPlot('plot', plotData, layout);
 }
 
 function getData() {
@@ -193,7 +194,6 @@ function getData() {
     $('#val2-lbl').text('val2: ' + vals[1].toFixed(3));
     $('#val3-lbl').text('Val3: ' + vals[2].toFixed(3));
     $('#val4-lbl').text('Val4: ' + vals[3].toFixed(3));
-    Plotly.newPlot('plot', plotData, layout);
     return data;
 }
 
