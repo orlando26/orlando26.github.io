@@ -262,7 +262,7 @@ function gauss(x, cm, l) {
 }
 
 function nGauss(sa) {
-    l = 0.15;
+    l = 0.20;
     cm = 0.25;
     sa = gauss(sa, cm, l);
 
