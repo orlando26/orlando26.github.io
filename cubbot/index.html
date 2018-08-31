@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cubbot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="css/rubik.css"></link>
+    <link rel="stylesheet" href="css/styles.css"></link>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap.material-design/4.0.2/bootstrap-material-design.min.css"
+    />
+
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+    <script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/tether/1.3.1/js/tether.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+    <script src="js/rubik-simple.js"></script>
+    <script src="js/scripts.js"></script>
+    <script src="js/algorythm.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap.material-design/4.0.2/bootstrap-material-design.iife.min.js"></script>
+
+
+
+
+</head>
+
+<body>
+    <div data-role="page" id="main">
+
+        <div class="header" data-role="header" style="overflow:hidden;">
+            <h1>Cubbot</h1>
+            <a id="btn-refresh" style=" background-color: #3f51b5;color: white;text-shadow: 0 1px 0 #059;border: none;" data-icon="refresh" class="ui-btn-left">restart</a>
+            <button style=" background-color: #3f51b5;color: white;text-shadow: 0 1px 0 #059;border: none;" href="#" id="btn-connect" class="ui-btn-right ui-btn-icon-left ui-icon-arduino">Conectar</button>
+            <button id="bt-conected" class="ui-btn ui-shadow ui-corner-all ui-btn-right ui-icon-check ui-btn-icon-notext"></button>
+            <button id="bt-disconected" class="ui-btn ui-shadow ui-corner-all ui-btn-right ui-icon-check ui-btn-icon-notext"></button>
+        </div>
+        <!-- /header -->
+
+        <div role="main" class="ui-content content">
+            <div style="margin-top:1vh" class="container">
+                <div class="row">
+                    <div class="col-xs-3">
+
+                    </div>
+                    <div class="col-xs-6">
+                        <ul class="pagination text-center">
+                            <li><a id="prevBtn" style="width:15%" data-icon="grid" href="javascript:void(0)">&lt&lt</a></li>
+                            <li class="active"><a style="width:70%" id="face-name" href="javascript:void(0)">Front Face</a></li>
+                            <li><a style="width:15%" id="statebtn" href="javascript:void(0)">&gt&gt</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-3">
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div id="left-face"></div>
+                    </div>
+                    <div style="height: 50vh" class="col-xs-6">
+                        <div id="face">
+                            <div id="s0" class="square"></div>
+                            <div id="s3" class="square"></div>
+                            <div id="s6" class="square"></div>
+
+                            <div id="s1" class="square"></div>
+                            <div id="s4" class="square center"></div>
+                            <div id="s7" class="square"></div>
+
+                            <div id="s2" class="square"></div>
+                            <div id="s5" class="square"></div>
+                            <div id="s8" class="square"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div id="right-face"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-2">
+                        <button id="color-picker-blue" class="color-picker" style="background:blue;"></button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button id="color-picker-orange" class="color-picker" style="background:rgb(255, 127, 0);"></button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button id="color-picker-red" class="color-picker" style="background:rgb(225, 0, 0)";"></button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button id="color-picker-white" class="color-picker" style="background:white;"></button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button id="color-picker-yellow" class="color-picker" style="background:yellow;"></button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button id="color-picker-green" class="color-picker" style="background:rgb(5, 140, 7);"></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+
+                    </div>
+                    <div class="col-xs-4">
+                        <a id="save-state-btn" style="width:100%;" class="btn btn-raised btn-danger">Save state</a>
+                        <a id="rubik-link" style="width:100%;" data-transition="flip" href="#rubik-page" class="btn btn-raised btn-success">See Cube</a>
+                    </div>
+                    <div class="col-xs-4">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /content -->
+
+       
+    </div>
+
+    <div id="rubik-page" data-role="page">
+        <div class="header" data-role="header">
+            <h1>Cubbot</h1>
+            <a style=" background-color: #3f51b5;color: white;text-shadow: 0 1px 0 #059;border: none;" onclick="window.history.back();" data-icon="arrow-l" class="ui-btn-left">Atras</a>
+
+        </div>
+        <div role="main" class="ui-content content">
+           
+            <div class="row">
+                    <div class="col-xs-6">
+                         <section id="rubik">
+                <div id="cube-container">
+                    <div id="cube-viewport">
+                        <div id="cube">
+                            <!-- UP FACE -->
+                            <!-- LEFT COLUMN (L)  -->
+                            <div class="utl cubie up LM UE BS">
+                                <div><span>U1</span></div>
+                            </div>
+                            <div class="ucl cubie up LM UE CS">
+                                <div><span>U2</span></div>
+                            </div>
+                            <div class="ubl cubie up LM UE FS">
+                                <div><span>U3</span></div>
+                            </div>
+                            <!-- CENTER COLUMN (C)  -->
+                            <div class="utc cubie up CM UE BS">
+                                <div><span>U4</span></div>
+                            </div>
+                            <div class="ucc cubie up CM UE CS">
+                                <div><span>U5</span></div>
+                            </div>
+                            <div class="ubc cubie up CM UE FS">
+                                <div><span>U6</span></div>
+                            </div>
+                            <!-- RIGHT COLUMN (R)  -->
+                            <div class="utr cubie up RM UE BS">
+                                <div><span>U7</span></div>
+                            </div>
+                            <div class="ucr cubie up RM UE CS">
+                                <div><span>U8</span></div>
+                            </div>
+                            <div class="ubr cubie up RM UE FS">
+                                <div><span>U9</span></div>
+                            </div>
+                            <!-- END UP FACE -->
+
+                            <!-- FRONT FACE -->
+                            <!-- LEFT COLUMN (L)  -->
+                            <div class="ftl cubie front LM UE FS">
+                                <div><span>F1</span></div>
+                            </div>
+                            <div class="fcl cubie front LM CE FS">
+                                <div><span>F2</span></div>
+                            </div>
+                            <div class="fbl cubie front LM DE FS">
+                                <div><span>F3</span></div>
+                            </div>
+                            <!-- CENTER COLUMN (C)  -->
+                            <div class="ftc cubie front CM UE FS">
+                                <div><span>F4</span></div>
+                            </div>
+                            <div class="fcc cubie front CM CE FS">
+                                <div><span>F5</span></div>
+                            </div>
+                            <div class="fbc cubie front CM DE FS">
+                                <div><span>F6</span></div>
+                            </div>
+                            <!-- RIGHT COLUMN (R)  -->
+                            <div class="ftr cubie front RM UE FS">
+                                <div><span>F7</span></div>
+                            </div>
+                            <div class="fcr cubie front RM CE FS">
+                                <div><span>F8</span></div>
+                            </div>
+                            <div class="fbr cubie front RM DE FS">
+                                <div><span>F9</span></div>
+                            </div>
+                            <!-- END FRONT FACE -->
+
+                            <!--DOWN FACE -->
+                            <!-- LEFT COLUMN (L)  -->
+                            <div class="dtl cubie down LM DE FS">
+                                <div><span>D1</span></div>
+                            </div>
+                            <div class="dcl cubie down LM DE CS">
+                                <div><span>D2</span></div>
+                            </div>
+                            <div class="dbl cubie down LM DE BS">
+                                <div><span>D3</span></div>
+                            </div>
+                            <!-- CENTER COLUMN (C)  -->
+                            <div class="dtc cubie down CM DE FS">
+                                <div><span>D4</span></div>
+                            </div>
+                            <div class="dcc cubie down CM DE CS">
+                                <div><span>D5</span></div>
+                            </div>
+                            <div class="dbc cubie down CM DE BS">
+                                <div><span>D6</span></div>
+                            </div>
+                            <!-- RIGHT COLUMN (R)  -->
+                            <div class="dtr cubie down RM DE FS">
+                                <div><span>D7</span></div>
+                            </div>
+                            <div class="dcr cubie down RM DE CS">
+                                <div><span>D8</span></div>
+                            </div>
+                            <div class="dbr cubie down RM DE BS">
+                                <div><span>D9</span></div>
+                            </div>
+                            <!-- END DOWN FACE -->
+
+                            <!--BACK FACE -->
+                            <!-- LEFT COLUMN (L)  -->
+                            <div class="btl cubie back LM DE BS">
+                                <div><span>B1</span></div>
+                            </div>
+                            <div class="bcl cubie back LM CE BS">
+                                <div><span>B2</span></div>
+                            </div>
+                            <div class="bbl cubie back LM UE BS">
+                                <div><span>B3</span></div>
+                            </div>
+                            <!-- CENTER COLUMN (C)  -->
+                            <div class="btc cubie back CM DE BS">
+                                <div><span>B4</span></div>
+                            </div>
+                            <div class="bcc cubie back CM CE BS">
+                                <div><span>B5</span></div>
+                            </div>
+                            <div class="bbc cubie back CM UE BS">
+                                <div><span>B6</span></div>
+                            </div>
+                            <!-- RIGHT COLUMN (R)  -->
+                            <div class="btr cubie back RM DE BS">
+                                <div><span>B7</span></div>
+                            </div>
+                            <div class="bcr cubie back RM CE BS">
+                                <div><span>B8</span></div>
+                            </div>
+                            <div class="bbr cubie back RM UE BS">
+                                <div><span>B9</span></div>
+                            </div>
+                            <!--END BOTTOM FACE -->
+
+                            <!--LEFT FACE -->
+                            <!-- LEFT COLUMN (L)  -->
+                            <div class="ltl cubie left LM UE BS">
+                                <div><span>L1</span></div>
+                            </div>
+                            <div class="lcl cubie left LM CE BS">
+                                <div><span>L2</span></div>
+                            </div>
+                            <div class="lbl cubie left LM DE BS">
+                                <div><span>L3</span></div>
+                            </div>
+                            <!-- CENTER COLUMN (C)  -->
+                            <div class="ltc cubie left LM UE CS">
+                                <div><span>L4</span></div>
+                            </div>
+                            <div class="lcc cubie left LM CE CS">
+                                <div><span>L5</span></div>
+                            </div>
+                            <div class="lbc cubie left LM DE CS">
+                                <div><span>L6</span></div>
+                            </div>
+                            <!-- RIGHT COLUMN (R)  -->
+                            <div class="ltr cubie left LM UE FS">
+                                <div><span>L7</span></div>
+                            </div>
+                            <div class="lcr cubie left LM CE FS">
+                                <div><span>L8</span></div>
+                            </div>
+                            <div class="lbr cubie left LM DE FS">
+                                <div><span>L9</span></div>
+                            </div>
+                            <!--END LEFT FACE -->
+
+                            <!--RIGHT FACE -->
+                            <!-- LEFT COLUMN (L)  -->
+                            <div class="rtl cubie right RM UE FS">
+                                <div><span>R1</span></div>
+                            </div>
+                            <div class="rcl cubie right RM CE FS">
+                                <div><span>R2</span></div>
+                            </div>
+                            <div class="rbl cubie right RM DE FS">
+                                <div><span>R3</span></div>
+                            </div>
+                            <!-- CENTER COLUMN (C)  -->
+                            <div class="rtc cubie right RM UE CS">
+                                <div><span>R4</span></div>
+                            </div>
+                            <div class="rcc cubie right RM CE CS">
+                                <div><span>R5</span></div>
+                            </div>
+                            <div class="rbc cubie right RM DE CS">
+                                <div><span>R6</span></div>
+                            </div>
+                            <!-- RIGHT COLUMN (R)  -->
+                            <div class="rtr cubie right RM UE BS">
+                                <div><span>R7</span></div>
+                            </div>
+                            <div class="rcr cubie right RM CE BS">
+                                <div><span>R8</span></div>
+                            </div>
+                            <div class="rbr cubie right RM DE BS">
+                                <div><span>R9</span></div>
+                            </div>
+                            <!--END LEFT FACE -->
+
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="jumbotron">
+                            <button class="btn btn-raised btn-success" id="girarTest">Resolver</button>
+                            <h3>Datos:</h3>
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    Tiempo:
+                                </div>
+                                <div class="col-xs-3">
+                                    <p id="time-lbl">00:00</p>
+                                </div>
+                                <div class="col-xs-3">Movimiento:</div>
+                                <div class="col-xs-3"><p id="movement-lbl"></p></div>
+                            </div>
+                            <div class="progress progress-striped active">
+                                <div id="solve-progress-bar" class="progress-bar" style="width: 0%"></div>
+                            </div>
+                            <button type="button" style="display:none;" class="btn btn-primary btn-transparent" id="details-btn">Detalles</button>
+                            <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <a href="javascript:void(0)" data-dismiss="modal" class="close btn btn-danger">x</a>
+                                        <h4 class="modal-title">Detalles</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Letras memorizadas:
+                                        <p id="memo-lbl">Some text in the modal.</p>
+                                        Algoritmos:
+                                        <p id="algorythms-lbl">muchos algoritmos :3
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="javascript:void(0)" data-dismiss="modal" class="btn btn-raised btn-danger">Close</a>
+                                    </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        
+    </div>
+    
+
+
+</body>
+
+</html>
