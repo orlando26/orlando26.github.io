@@ -10334,11 +10334,6 @@ var __importDefault = (undefined && undefined.__importDefault) || function (mod)
 var rootRouterConfig = [
     {
         path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
-    },
-    {
-        path: 'home',
         loadChildren: './views/home/home.module#HomeModule'
     }
 ];
